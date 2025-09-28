@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ponto da Esfiha - Cardápio Digital</title>
+    <meta name="description" content="Cardápio digital do Ponto da Esfiha - esfihas, pizzas, lanches e muito mais. Faça seu pedido direto da mesa.">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-red: #DC2626;
+            --primary-red-dark: #991B1B;
+            --accent-gold: #F59E0B;
+            --accent-gold-dark: #D97706;
+            --neutral-black: #000;
+            --white: #FFFFFF;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-600: #6B7280;
+            --gray-900: #1F2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+        }
+
+        /* HEADER */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            width: 100%;
+            background: linear-gradient(to right, var(--neutral-black), var(--primary-red-dark));
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--neutral-black);
+            font-weight: 800;
+        }
+
+        .brand-text {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        .brand-subtitle {
+            color: rgba(245, 158, 11, 0.8);
+            font-size: 0.875rem;
+        }
+
+        .cart-button {
+            position: relative;
+            
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            color: var(--white);
+            border: 1px solid var(black);
+            padding: 0.95rem 1.6rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-gold);
+            color: var(--neutral-black);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 2px solid var(--white);
+        }
+
+        /* CATEGORIES NAV */
+        .categories {
+            position: sticky;
+            top: 72px;
+            z-index: 40;
+            background: linear-gradient(135deg, var(--primary-red) 10%, var(--neutral-black) 100%);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            padding: 1rem 0;
+        }
+
+        .categories-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .categories-list {
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-gold) transparent;
+        }
+
+        .categories-list::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .categories-list::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        .category-button {
+            flex-shrink: 0;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .category-button:hover {
+            background: var(--accent-gold);
+            color: var(--neutral-black);
+            border-color: var(--accent-gold);
+            transform: translateY(-1px);
+        }
+
+        .category-button.active {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            border-color: var(--accent-gold);
+            color: var(--neutral-black);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        /* MAIN CONTENT */
+        .main {
+            padding: 2rem 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            font-family: 'Playfair Display', Georgia, serif;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--accent-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.125rem;
+            color: var(--gray-600);
+        }
+
+        .category-header {
+            margin-bottom: 2rem;
+        }
+
+        .category-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--gray-900);
+            text-transform: capitalize;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-header p {
+            color: var(--gray-600);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        /* PRODUCT CARD */
+        .product-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            position: relative;
+            overflow: hidden;
+            height: 200px;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-content {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .product-description {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .pizza-sizes {
+            margin-bottom: 1rem;
+        }
+
+        .pizza-sizes p {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .size-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .size-button {
+            flex: 1;
+            padding: 0.5rem;
+            border: 2px solid var(--primary-red);
+            background: var(--white);
+            color: var(--primary-red);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .size-button.active,
+        .size-button:hover {
+            background: var(--primary-red);
+            color: var(--white);
+        }
+
+        .quantity-price {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            background: var(--gray-100);
+        }
+
+        .quantity-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quantity-display {
+            width: 32px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .product-price {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%);
+            color: var(--neutral-black);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+.add-to-cart {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+    color: var(--white);
+    border: 3px solid var(black); /* Borda dourada */
+    padding: 1.1rem 1.8rem;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-size: 1.15rem;
+    min-height: 56px;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3); /* Sombra */
+}
+
+.add-to-cart:hover {
+    transform: translateY(-2px); /* Efeito mais pronunciado */
+    box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+    border-color: var(--accent-gold-dark);
+}
+
+        /* CART MODAL */
+        .cart-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none;
+        }
+
+        .cart-modal.open {
+            display: block;
+        }
+
+        .cart-content {
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            max-width: 400px;
+            background: var(--white);
+            box-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-header {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+            color: var(--white);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: var(--white);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .close-cart:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+   .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    max-height: 70vh; /* ← ADICIONAR APENAS ESTA LINHA */
+}
+
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .cart-empty i {
+            font-size: 4rem;
+            color: var(--gray-200);
+            margin-bottom: 1rem;
+        }
+
+        .cart-item {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .cart-item-size {
+            background: var(--gray-200);
+            color: var(--gray-700);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .cart-item-quantity button {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--gray-200);
+            background: var(--white);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: var(--primary-red);
+            font-size: 0.875rem;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--primary-red);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .remove-item:hover {
+            background: var(--gray-200);
+        }
+
+        .cart-checkout {
+            border-top: 1px solid var(--gray-200);
+            background: var(--gray-50);
+            padding: 1.5rem;
+        }
+
+        .checkout-form {
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .form-group textarea {
+            height: 60px;
+            resize: vertical;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.125rem;
+            font-weight: 700;
+            padding: 1rem 0;
+            border-top: 1px solid var(--gray-200);
+            margin-bottom: 1rem;
+        }
+
+        .cart-total-price {
+            color: var(--primary-red);
+        }
+
+        .checkout-button {
+            width: 100%;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: var(--white);
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* FOOTER */
+        .footer {
+            background-color: #000000;
+            color: var(--white);
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo i {
+            color: var(--accent-gold);
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+        }
+
+        .footer-credits {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .header-container {
+        padding: 0.75rem 1rem;
+    }
+
+    .brand-text {
+        font-size: 1.25rem;
+    }
+
+    .categories-container {
+        padding: 0 1rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    .section-title h1 {
+        font-size: 2rem;
+    }
+
+    .category-header h2 {
+        font-size: 2rem;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .cart-content {
+        width: 100%;
+    }
+    
+    /* MELHORIAS ADICIONAIS SEM MUDAR VISUAL */
+    .categories {
+        top: 70px;
+    }
+    
+    .cart-items {
+        max-height: 60vh;
+    }
+    
+    .quantity-price {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .quantity-controls {
+        justify-content: center;
+    }
+    
+    .product-price {
+        text-align: center;
+    }
+}
+
+/* CELULARES PEQUENOS */
+@media (max-width: 480px) {
+    .header-container {
+        padding: 0.5rem 1rem;
+    }
+    
+    .brand-text {
+        font-size: 1.1rem;
+    }
+    
+    .section-title h1 {
+        font-size: 1.75rem;
+    }
+    
+    .category-header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* TABLETS */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+        /* ANIMATIONS */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .product-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* TOAST NOTIFICATIONS */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            z-index: 200;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .toast-description {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        .logoA {
+    position: abisolute;
+    
+}
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-container">
+                 
+            <div class="logo-container">
+
+                <div class="logo">
+                  <div class="logo">
+</div> <img src="logo.jpg" alt="logoA" style="float: right; margin-left: 10px; border-radius: 70%; width: 73px; height: 73px; object-fit: contain;">
+                    <i class="fas fa-store"></i>
+                </div>
+                <div>
+                    <div class="brand-text">Ponto da Esfiha</div>
+                    <div class="brand-subtitle">Cardápio Digital</div>
+                </div>
+            </div>
+            <button class="cart-button" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                Carrinho
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- CATEGORIES NAV -->
+    <nav class="categories">
+        <div class="categories-container">
+            <div class="categories-list" id="categoriesList">
+                <button class="category-button active" onclick="selectCategory('pizzas')">Pizzas</button>
+                <button class="category-button" onclick="selectCategory('esfihas-abertas')">Esfihas Abertas</button>
+                <button class="category-button" onclick="selectCategory('esfihas-fechadas')">Esfihas Fechadas</button>
+                <button class="category-button" onclick="selectCategory('esfihas-doces')">Esfihas Doces</button>
+                <button class="category-button" onclick="selectCategory('porcoes')">Porções</button>
+                <button class="category-button" onclick="selectCategory('lanches')">Lanches</button>
+                <button class="category-button" onclick="selectCategory('salgados')">Salgados</button>
+                <button class="category-button" onclick="selectCategory('pasteis')">Pastéis</button>
+                <button class="category-button" onclick="selectCategory('beirutes')">Beirutes</button>
+                <button class="category-button" onclick="selectCategory('sucos')">Sucos</button>
+                <button class="category-button" onclick="selectCategory('bebidas')">Bebidas</button>
+                <button class="category-button" onclick="selectCategory('feijoada')">Feijoada</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <div class="container">
+            <div class="section-title">
+                <h1>Cardápio Premium</h1>
+                <p>Descubra nossos sabores únicos e faça seu pedido direto da mesa</p>
+            </div>
+
+            <div id="productSections"></div>
+        </div>
+    </main>
+
+    
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-logo">
+            <div class="logo" style="width: 35px; height: 35px; background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                <img src="logo.jpg" alt="Ponto da Esfiha" style="border-radius: 8px; width: 32px; height: 32px; object-fit: cover;">
+            </div>
+            <span style="font-weight: 600;">Ponto da Esfiha</span>
+        </div>
+        
+        <div style="margin: 1rem 0;">
+            <a href="https://instagram.com/pontodaesfiha" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent-gold); text-decoration: none; font-weight: 500; padding: 0.5rem 1rem; border: 1px solid var(--accent-gold); border-radius: 25px; transition: all 0.3s ease;">
+                <i class="fab fa-instagram" style="font-size: 1.2rem;"></i>
+                <span>@pontodaesfiha</span>
+            </a>
+        </div>
+        
+        <p class="footer-text">
+            Desenvolvido com <i class="fas fa-heart" style="color: #EF4444;"></i> pela
+        </p>
+        
+        <div class="footer-credits" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.5rem;">
+            <span>TopNotchStudio</span>
+            <img src="TopNotch.png" alt="TopNotch Studio" style="border-radius: 50%; width: 24px; height: 24px; object-fit: contain;">
+        </div>
+        
+        <div class="footer-credits" style="margin-top: 1rem;">
+            <p>© 2025 Ponto da Esfiha - Todos os direitos reservados</p>
+            <p>Cardápio Digital - Peça direto da sua mesa</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- CART MODAL -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2><i class="fas fa-shopping-bag"></i> Seu Pedido</h2>
+                <button class="close-cart" onclick="toggleCart()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            
+            <div class="cart-items" id="cartItems">
+                <div class="cart-empty">
+                    <i class="fas fa-shopping-bag"></i>
+                    <p>Seu carrinho está vazio</p>
+                    <small>Adicione alguns produtos para começar</small>
+                </div>
+            </div>
+            
+            <div class="cart-checkout" id="cartCheckout" style="display: none;">
+                <div class="checkout-form">
+                    <div class="form-group">
+                        <label for="customerName">Seu Nome</label>
+                        <input type="text" id="customerName" placeholder="Digite seu nome">
+                    </div>
+                    <div class="form-group">
+                        <label for="tableNumber">Número da Mesa</label>
+                        <input type="text" id="tableNumber" placeholder="Ex: 5">
+                    </div>
+                    <div class="form-group">
+                        <label for="orderNotes">Observações (opcional)</label>
+                        <textarea id="orderNotes" placeholder="Alguma observação especial..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span class="cart-total-price" id="cartTotal">R$ 0,00</span>
+                </div>
+                
+                <button class="checkout-button" onclick="checkout()">
+                    Finalizar Pedido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast">
+        <div class="toast-title" id="toastTitle"></div>
+        <div class="toast-description" id="toastDescription"></div>
+    </div>
+
+    <script>
+        // DADOS DO CARDÁPIO - PRESERVANDO TODOS OS ITENS ORIGINAIS
+        const MENU_DATA = {
+            categories: [
+                { name: "Pizzas", slug: "pizzas", displayOrder: 1 },
+                { name: "Esfihas Abertas", slug: "esfihas-abertas", displayOrder: 2 },
+                { name: "Esfihas Fechadas", slug: "esfihas-fechadas", displayOrder: 3 },
+                { name: "Esfihas Doces", slug: "esfihas-doces", displayOrder: 4 },
+                { name: "Porções", slug: "porcoes", displayOrder: 5 },
+                { name: "Lanches", slug: "lanches", displayOrder: 6 },
+                { name: "Salgados", slug: "salgados", displayOrder: 7 },
+                { name: "Pastéis", slug: "pasteis", displayOrder: 8 },
+                { name: "Beirutes", slug: "beirutes", displayOrder: 9 },
+                { name: "Sucos", slug: "sucos", displayOrder: 10 },
+                { name: "Bebidas", slug: "bebidas", displayOrder: 11 },
+                { name: "Feijoada", slug: "feijoada", displayOrder: 12 },
+            ],
+            products: [
+                // PIZZAS - COM TAMANHOS BROTO/GRANDE
+                { name: "Muçarela", description: "Molho de tomate, muçarela e orégano", price: "35.00", priceGrande: "50.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXHxvyfU0RmRBoRyQdoGDUwjxJqimeHWkkwyZP54f1BNFuBm1hgh6KgSly&s=10", displayOrder: 1 },
+                { name: "Presunto", description: "Molho de tomate, muçarela, presunto e orégano", price: "38.00", priceGrande: "55.00", categorySlug: "pizzas", imageUrl: "https://www.cardapio.donnagulla.com.br/wp-content/uploads/2023/02/mista.png", displayOrder: 2 },
+                { name: "Calabresa", description: "Molho de tomate, muçarela, calabresa e orégano", price: "40.00", priceGrande: "58.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHlwPiDVXU0CtDqsRu6zDOidmKgAPvQYuEYD3jt1SAATNB11bw7CyQ5fRM&s=10", displayOrder: 3 },
+                { name: "Margherita", description: "Molho de tomate, muçarela, tomate, manjericão e orégano", price: "42.00", priceGrande: "60.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo4DA3QfVdp9Ky4eUa3MDq7TBY9aoLICpB-kFGZD8hJY61Ul3SXsJdxQc&s=10", displayOrder: 4 },
+                { name: "Quatro Queijos", description: "Molho de tomate, muçarela, gorgonzola, parmesão e catupiry", price: "45.00", priceGrande: "65.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYiLVXWypmOAz090FZ-CVH3bf5Mkn8kz66UHjeBeqHicLarVTfWi3Ezw3T&s=10", displayOrder: 5 },
+                { name: "Portuguesa", description: "Molho de tomate, muçarela, presunto, ovos, cebola, ervilha e orégano", price: "48.00", priceGrande: "68.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsMup2blnNOt2r6ihr6WXhwZ6cYkmw-EWljdxTBoV6o1MUVMCwMT6v_bw&s=10", displayOrder: 6 },
+                { name: "Frango com Catupiry", description: "Molho de tomate, muçarela, frango desfiado, catupiry e orégano", price: "45.00", priceGrande: "65.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7vY6N0FKhG64xy6xgyLD8twQowzVq80jCJkq4TzQDwAoXk9hqCdfPPLvf&s=10", displayOrder: 7 },
+                { name: "Napolitana", description: "Molho de tomate, muçarela, tomate, parmesão e orégano", price: "42.00", priceGrande: "60.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv5HE2syNi8JsocioyuXjMgtrlwmdPWAAnj8AJcuQOgDlmMkqvtvvl3-DR&s=10", displayOrder: 8 },
+                { name: "Bacon", description: "Molho de tomate, muçarela, bacon e orégano", price: "45.00", priceGrande: "65.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKUz5bxVXSarCSKDLtUivZ4-e1IDtU6F8EB2o6USFQfWmwJKH-GmtnJD8&s=10", displayOrder: 9 },
+                { name: "Atum", description: "Molho de tomate, muçarela, atum e orégano", price: "40.00", priceGrande: "58.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs53AxqFGh_jeiJMCs_K1a3KJ6MclhoW7WTyeSGXm4sg-8djm59IPCXGM&s=10", displayOrder: 10 },
+                { name: "Palmito", description: "Molho de tomate, muçarela, palmito e orégano", price: "40.00", priceGrande: "58.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIpDt8ZeClaE1YUyydzH4Tii5VH27nfE-QG1i3wIPeGFiY4lYgcqTJ1v0&s=10", displayOrder: 11 },
+                { name: "Milho", description: "Molho de tomate, muçarela, milho e orégano", price: "38.00", priceGrande: "55.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIiCXPEFwPlIpUxWkcNNMc-0BbFwMPds_oj564Lo6GZMtgsbW5YubZWYA&s=10", displayOrder: 12 },
+                // NOVAS PIZZAS
+                { name: "Carne Seca com Banana da Terra", description: "Molho de tomate, muçarela, carne seca, banana da terra e orégano", price: "45.00", priceGrande: "60.00", categorySlug: "pizzas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLc2K-tkYXLKsZ0_8Wx2-4J15uBhVqv5JB4rcDC8juApSMhq4CFqXAHsQ&s=10", displayOrder: 13 },
+                { name: "Camarão", description: "Molho de tomate, muçarela, camarão e orégano", price: "48.00", priceGrande: "65.00", categorySlug: "pizzas", imageUrl: "https://claudia.abril.com.br/wp-content/uploads/2020/02/receita-pizza-de-camarao.jpg?quality=70&strip=info&w=620", displayOrder: 14 },
+
+                // ESFIHAS ABERTAS
+                { name: "Carne", description: "Esfiha aberta com carne temperada", price: "6.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTs2bM33gmlC6aoAnp_q4u1775T4JIcxTEJpb2MlorD8arAbltMxGCFl3E&s=10", displayOrder: 1 },
+                { name: "Queijo", description: "Esfiha aberta com queijo derretido", price: "6.00", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwY5t3mWzG_RLR8m4oFb8niNkd-CLpMqUGjKDAN9P6bRRjgiVRwLEozJOC&s=10", displayOrder: 2 },
+                { name: "Calabresa com Queijo", description: "Esfiha aberta com calabresa e queijo", price: "7.00", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSS9I6LLUOM4fTUEEq5xf2OeUh2HDt_-8NNkAI5ZkFR69YkZ5LWWsD5DOY&s=10", displayOrder: 3 },
+                { name: "Calabresa com Catupiry", description: "Esfiha aberta com calabresa e catupiry", price: "7.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcYwtdh6rkDHKx2fHFgNJk4PMzwQdX3t3laVAG74TJUdnRSFEmhXj5qXg&s=10", displayOrder: 4 },
+                { name: "Calabresa com Cheddar", description: "Esfiha aberta com calabresa e cheddar", price: "7.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTl0yTGvLQL9PSkGXk2sa6sXhVgZZnqTtRAbRwsS7VEpT4aTLaV0Gmdnpk&s=10", displayOrder: 5 },
+                { name: "Frango com Queijo", description: "Esfiha aberta com frango e queijo", price: "7.00", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWxC1emq5lEuKY-1wLgePfooXqWuStVa9SCzkKNqUqO02D9TDbQN_CNq0&s=10", displayOrder: 6 },
+                { name: "Frango com Catupiry", description: "Esfiha aberta com frango e catupiry", price: "7.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcqcXDJlE9_mQ-pClQOPLkJcprTlGZaZgxgkpJsnCBa_xHOBEZC4ZxJ_HM&s=10", displayOrder: 7 },
+                { name: "Frango com Cheddar", description: "Esfiha aberta com frango e cheddar", price: "7.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbT3UJBIDyfCJ85e9Vi6j_u7zKqYY1j5_9862MKuDStQpfxiJMnb0wwhI&s=10", displayOrder: 8 },
+                { name: "Atum", description: "Esfiha aberta com atum", price: "7.00", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToSd5rXlfSar99l6n1OvRh1OhM7OZLa9FYMbPkCdX6YlZJK2bbUuOC72Rm&s=10", displayOrder: 9 },
+                { name: "Atum com Queijo", description: "Esfiha aberta com atum e queijo", price: "7.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwaJ3UkTPFO7nbW56680fwX767Z6fkvNtpBtkhPlbwxWdqMGbvJq-8HfF5&s=10", displayOrder: 10 },
+                { name: "Bauru", description: "Esfiha aberta estilo bauru", price: "8.00", categorySlug: "esfihas-abertas", imageUrl: "https://pontodaesfihasaosebastiao.konor.app/_core/_uploads/218/2024/02/1730280224idfhcgg6i9.png", displayOrder: 11 },
+                { name: "Palmito com Queijo", description: "Esfiha aberta com palmito e queijo", price: "7.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxppeTzrOr9yAgdZhWjnc2mUk-TKTYPOQGs4Kdh19Z7iRrGvt42YhRWVEp&s=10", displayOrder: 12 },
+                { name: "Dois Queijos", description: "Esfiha aberta com dois tipos de queijo", price: "7.00", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIRNBOgjkoVdncgJ21R9a1iVRf-uDFSK0lkA&s", displayOrder: 13 },
+                { name: "Milho com Queijo", description: "Esfiha aberta com milho e queijo", price: "7.00", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIdtfFGI5lUuv4KvsqRcHuBrfDWmvi8agd2SrHDOKnUKeUkfp_veOqR8s&s=10", displayOrder: 14 },
+                { name: "Crocante", description: "Esfiha aberta crocante especial", price: "7.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFZ5vFWRXAWy57XqGa1SM3RETnet_1oK1TzlnhPVPZGDx3gwfk5jFNF-pt&s=10", displayOrder: 15 },
+                { name: "Napolitana", description: "Esfiha aberta com tomate e parmesão", price: "7.50", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9ESWT-20qmFT_r5g5XmkDJ8tps2GPXbfkIgfcu9mpiYjm7RrCdPkXA8A&s=10", displayOrder: 16 },
+                { name: "Bacon com Queijo", description: "Esfiha aberta com bacon e queijo", price: "8.00", categorySlug: "esfihas-abertas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZtiYjbS983No6583fYWgA_9DYbX7tczOXU3Q5Bh0zxOGQXzSdJbkIHFFh&s=10", displayOrder: 17 },
+
+                // ESFIHAS FECHADAS
+                { name: "Frango com Catupiry", description: "Esfiha fechada com frango e catupiry", price: "7.50", categorySlug: "esfihas-fechadas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvjQI8VetUeWpGDkKxBuETU4KsmDq8fMHYDY_qOrhvPpTQeF41VOGyO2lP&s=10", displayOrder: 1 },
+                { name: "Presunto com Queijo", description: "Esfiha fechada com presunto e queijo", price: "7.00", categorySlug: "esfihas-fechadas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScIA_T9A3BjuyBumw-ybJM5FLh6jnIJ7R3byIUwoPuqFxDmxE350UMnZ4&s=10", displayOrder: 2 },
+                { name: "Calabresa com Queijo", description: "Esfiha fechada com calabresa e queijo", price: "7.00", categorySlug: "esfihas-fechadas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMQ1M2_BDuJ3Ugpd7s-4aB_-QlisDQc4_0_bmsUpQ9uXpC7kbNDjmP5_o&s=10", displayOrder: 3 },
+                { name: "Carne", description: "Esfiha fechada com carne temperada", price: "6.50", categorySlug: "esfihas-fechadas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROb0ISiAF47IsPGCDCcbER-Xwq7lMJP-ECCaozkcnXUMWfFoKB5yzdZBc&s=10", displayOrder: 4 },
+
+                // ESFIHAS DOCES
+                { name: "Chocolate com Granulado", description: "Esfiha doce com chocolate e granulado", price: "8.00", categorySlug: "esfihas-doces", imageUrl: "http://www.zucchinni.com.br/wp-content/uploads/2014/06/pag-esfiha-03.jpg", displayOrder: 1 },
+                { name: "Chocolate com Morango", description: "Esfiha doce com chocolate e morango", price: "8.50", categorySlug: "esfihas-doces", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSssgW5IvsZ7WIijFtr5RCdMnZV76s2RSWs_Q&usqp=CAU", displayOrder: 2 },
+                { name: "Beijinho", description: "Esfiha doce de beijinho", price: "8.00", categorySlug: "esfihas-doces", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR4wZthms8IV90-5JgXb9wckuuTLsu70iSbakaeTJXP4vDbewNm1uODAg&s=10", displayOrder: 3 },
+                { name: "Prestígio", description: "Esfiha doce de prestígio", price: "8.50", categorySlug: "esfihas-doces", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8NEY3jivOEAnQTsqcB8pXab7Skga0bwbvMw&usqp=CAU", displayOrder: 4 },
+                { name: "Doce de Leite", description: "Esfiha doce com doce de leite", price: "8.00", categorySlug: "esfihas-doces", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdYieY8AdEu4fR_oHsfWeZzW3guUQhHyyc_p-dHmGKCs8RSFbHDIE5t-sQ&s=10", displayOrder: 5 },
+                { name: "Romeu e Julieta", description: "Esfiha doce com goiabada e queijo", price: "8.50", categorySlug: "esfihas-doces", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhUfDxvfsbneRo25FFhjAr7CC1KeII3lB32hOMjg7Iytf3AtRcK4j7a_kC&s=10", displayOrder: 6 },
+
+                // PORÇÕES
+                { name: "Batata Frita Pequena", description: "Porção pequena de batata frita", price: "15.00", categorySlug: "porcoes", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBEe-o90oSlWkjsDt4YFNJKDUf2DXqISQBdw&usqp=CAU", displayOrder: 1 },
+                { name: "Batata Frita Grande", description: "Porção grande de batata frita", price: "25.00", categorySlug: "porcoes", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_sgcm_mmqOavmBzi5k5jRxNguM_cb64bAQR_kYstdOw&s=10", displayOrder: 2 },
+                { name: "Mandioca Frita", description: "Porção de mandioca frita", price: "18.00", categorySlug: "porcoes", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfsQZiE2JLUxLgQv2M-ouv8VVyieGFJn0kmqY4whdnFg&s=10", displayOrder: 3 },
+                { name: "Polenta Frita", description: "Porção de polenta frita", price: "20.00", categorySlug: "porcoes", imageUrl: "https://i.ytimg.com/vi/7N8kAJhZD3Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDNrmk9anBoqxXDELTVjXeApPuf4g", displayOrder: 4 },
+                { name: "Frango a Passarinho", description: "Porção de frango a passarinho", price: "30.00", categorySlug: "porcoes", imageUrl: "https://comidinhasdochef.com/wp-content/uploads/2019/08/Frango-a-Passarinho-Frito.jpg", displayOrder: 5 },
+                // NOVAS PORÇÕES
+                { name: "Frango Frito", description: "Porção de frango frito crocante", price: "35.00", categorySlug: "porcoes", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2CEhleR3TRTSRQAsWLFNh805PfrjulhxOAP7IUEhknA&s=10", displayOrder: 6 },
+                { name: "Costela de Porco", description: "Porção de costela de porco suculenta", price: "40.00", categorySlug: "porcoes", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9oLx3kLWyd3Vt7Q9lYrmgA8jkCMFnY-tZNWcIA7A8NA&s=10", displayOrder: 7 },
+
+                // LANCHES
+                { name: "Misto Quente", description: "Pão de forma com presunto e queijo", price: "12.00", categorySlug: "lanches", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw5Yocku5nlqnHR8uvVJP9kNmodh2UGbA7HzNeYrbuow&s=10", displayOrder: 1 },
+                { name: "Bauru", description: "Pão francês com presunto, queijo, tomate e alface", price: "15.00", categorySlug: "lanches", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsdjoAlPal3J7t1iBBfixppEBqrZXOz8w9XU5PqHQCm-Dbo0kfTGt7_lH9&s=10", displayOrder: 2 },
+                { name: "Hambúrguer Simples", description: "Hambúrguer com carne, queijo e salada", price: "18.00", categorySlug: "lanches", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmYbF0J-4_tKMy19nHnKo72jV4wNCXOCFdziHDOSRJQ7l87OiCMmU1kMcO&s=10", displayOrder: 3 },
+                { name: "Hambúrguer Duplo", description: "Hambúrguer com duas carnes, queijo e salada", price: "25.00", categorySlug: "lanches", imageUrl: "https://media.istockphoto.com/id/468164481/pt/foto/tradicional-homestyle-burger.jpg?s=612x612&w=0&k=20&c=cUyr2UGpqCToW1EMgD1trKNAfUNdEQBZ2_XItB3uvjw=", displayOrder: 4 },
+                { name: "X-Bacon", description: "Hambúrguer com carne, bacon, queijo e salada", price: "22.00", categorySlug: "lanches", imageUrl: "https://embutidosbonatti.ind.br/temp/xxx-57-1920x1080m1.jpg", displayOrder: 5 },
+                { name: "X-Egg", description: "Hambúrguer com carne, ovo, queijo e salada", price: "20.00", categorySlug: "lanches", imageUrl: "https://sachefmio.blob.core.windows.net/fotos/x-egg-73519.jpg", displayOrder: 6 },
+                { name: "X-Tudo", description: "Hambúrguer completo com todos os ingredientes", price: "28.00", categorySlug: "lanches", imageUrl: "https://instadelivery-public.nyc3.cdn.digitaloceanspaces.com/images/YX6NC76FASupEsbNpIIYWqpfVhBcAXlZ46TnEcKb.jpg", displayOrder: 7 },
+                { name: "Hot Dog Simples", description: "Hot dog com salsicha e molhos", price: "12.00", categorySlug: "lanches", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_eqzxrm4uYnFLE2zOLUd04Turpz23BrNAP3--aLMiLg&s=10", displayOrder: 8 },
+                { name: "Hot Dog Especial", description: "Hot dog com salsicha, batata palha e molhos especiais", price: "18.00", categorySlug: "lanches", imageUrl: "https://s3-sa-east-1.amazonaws.com/loja2/4def1bf6ba2deeca0d43b787c60edf05.jpg", displayOrder: 9 },
+
+                // SALGADOS
+                { name: "Coxinha de Frango", description: "Coxinha tradicional de frango", price: "6.00", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8oFPaMSCavrlChRYbxnu5GYqYf8KNyRsebw&usqp=CAU", displayOrder: 1 },
+                { name: "Coxinha de Presunto e Queijo", description: "Coxinha recheada com presunto e queijo", price: "6.50", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7aSbXrsFwnh6J_4lCWGzvORXGyENqgus9AxbnYsdgzutceLgpY16SmqQ&s=10", displayOrder: 2 },
+                { name: "Bolinha de Queijo", description: "Bolinha de queijo empanada", price: "5.50", categorySlug: "salgados", imageUrl: "https://sabores-new.s3.amazonaws.com/public/2024/11/bolinha-de-queijo-1024x494.webp", displayOrder: 3 },
+                { name: "Pão de Açúcar", description: "Pão de açúcar recheado", price: "6.00", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxrt7f-oHbS5DnkQP6ygQmGrLQRaUecXtbzzdl-cj6jm0ReP9c_pNwqxQ&s=10", displayOrder: 4 },
+                { name: "Risole de Frango", description: "Risole recheado com frango", price: "6.00", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1XFe8BUEBycMUDlxViN6uLD_Uc1DTxeiyQFx_pLEHWWbrYfmXqcjWu3Xi&s=10", displayOrder: 5 },
+                { name: "Risole de Presunto e Queijo", description: "Risole recheado com presunto e queijo", price: "6.50", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkfa8fW2ke2QL_TpdK9u-4LXwkkm6e-IGqW5gQtgPIjtj_gRyE7-PKrIM&s=10", displayOrder: 6 },
+                { name: "Pastel de Queijo", description: "Pastel frito recheado com queijo", price: "7.00", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEPKaNzBBa1qBD3u9Ei1Q6Jm6meZblY-dFM-dKR7_xShtjld5yTOjX3vY&s=10", displayOrder: 7 },
+                { name: "Pastel de Carne", description: "Pastel frito recheado com carne", price: "7.50", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-jJPpg0fH_5TyLPLEeuRfJXQ_af4XS1awrw_tZv3yeQWQFFAsMFuZ5zI&s=10", displayOrder: 8 },
+                { name: "Enrolado de Salsicha", description: "Massa enrolada com salsicha", price: "6.50", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCmtE8HgacvHB1evSy5RVYhhjhNiGA7Seyow&s", displayOrder: 9 },
+                { name: "Enrolado de Presunto e Queijo", description: "Massa enrolada com presunto e queijo", price: "7.00", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsCZA-52exvGZwI5lKDX40yuocrgE1LW9GgURc2NEg4U3MbrFgkF-eHjw&s=10", displayOrder: 10 },
+                { name: "Joelho de Presunto e Queijo", description: "Joelho recheado com presunto e queijo", price: "8.00", categorySlug: "salgados", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTu50dFXonrODvUT-WoUyvHwIX7u9I_TGf4HOCE8bBTWbNv40Y1pPD1Kgg&s=10", displayOrder: 11 },
+
+                // PASTÉIS
+                { name: "Frango com Catupiry", description: "Pastel de frango com catupiry", price: "12.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEEcIuY2D1cQ2Ek_qLEmE5LKGaNJ_T4LdV0Yc3oj3ynX5RCQditck--ZSe&s=10", displayOrder: 1 },
+                { name: "Calabresa com Queijo", description: "Pastel de calabresa com queijo", price: "11.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd24uUnnONBnTdm6AfEfh5xokSfZFkgALZWBsAzkkc-qu-UqkiB_uyP1lP&s=10", displayOrder: 2 },
+                { name: "Presunto com Queijo", description: "Pastel de presunto com queijo", price: "10.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaZTr_aG2gCIG9nsYHtW6OnZdZvAnSIvLR80-v4_rt9-7lHNa9zi-naSEm&s=10", displayOrder: 3 },
+                { name: "Queijo", description: "Pastel de queijo", price: "9.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEPKaNzBBa1qBD3u9Ei1Q6Jm6meZblY-dFM-dKR7_xShtjld5yTOjX3vY&s=10", displayOrder: 4 },
+                { name: "Carne", description: "Pastel de carne", price: "10.00", categorySlug: "pasteis", imageUrl: "https://static-images.ifood.com.br/image/upload/t_high/pratos/815fa20a-6c75-4ac8-ad9c-d18857b03cfe/202004192017_WUL4_p.jpg", displayOrder: 5 },
+                { name: "Palmito", description: "Pastel de palmito", price: "10.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtAcOq5FjiikQg54hOz6vDsTcHzAbt6_zlHaUvAFIH6Kl3T-IVl5QLNZI&s=10", displayOrder: 6 },
+                { name: "Camarão", description: "Pastel de camarão", price: "15.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGuggFVN9RQ76djJJlY2xuTdRmvyLljjsGnsNOMHaLDA&s", displayOrder: 7 },
+                { name: "Pizza", description: "Pastel sabor pizza", price: "11.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoa6sx-oZv2vzGV6kbkL2GUNvRntf-U6i6yELreE_FNJGlTav9_zp5Ja4&s=10", displayOrder: 8 },
+                { name: "Dois Queijos", description: "Pastel de dois queijos", price: "10.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEnhgFsXV9g811YE3An_WZ1cYOgmYE5ooIADCqikg_OesZaiucOOnyE9M&s=10", displayOrder: 9 },
+                { name: "Bacon com Queijo", description: "Pastel de bacon com queijo", price: "12.00", categorySlug: "pasteis", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3PrKKPlDtu4cRtbeFNFtZXdxipZ2qhcg5fvzKzxHYigAzyAMiehplC3KR&s=10", displayOrder: 10 },
+
+                // BEIRUTES
+                { name: "Beirute de Frango", description: "Beirute recheado com frango", price: "18.00", categorySlug: "beirutes", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwjx-brKqZM_CGNlkJoamrcJrDuRChEKy2qdXhbItWCQ&s=10", displayOrder: 1 },
+                { name: "Beirute de Carne", description: "Beirute recheado com carne", price: "20.00", categorySlug: "beirutes", imageUrl: "https://www.receitasnestle.com.br/sites/default/files/srh_recipes/4b14ae406a3772883627a0c23724e6ed.jpg", displayOrder: 2 },
+                { name: "Beirute de Presunto", description: "Beirute recheado com presunto", price: "16.00", categorySlug: "beirutes", imageUrl: "https://p2.trrsf.com/image/fget/cf/500/0/images.terra.com/2025/07/14/beirute-de-queijo-e-presunto-na-airfryer-(4)-1jyajqq3d5lya.jpg", displayOrder: 3 },
+
+                // SUCOS
+                { name: "Laranja", description: "Suco natural de laranja", price: "8.00", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcK9vXkxY2etNif44CKkuZROeGeVyDC93DEw&s", displayOrder: 1 },
+                { name: "Limão", description: "Suco natural de limão", price: "8.00", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpER7E5v3H-Sx-cZ4QtzDu_0h2CNz7lyhZSYeBIfbne5Z6zPGSvGg3tKk&s=10", displayOrder: 2 },
+                { name: "Manga", description: "Suco natural de manga", price: "9.00", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPKuenDVZngzRtIGlRpooGXHCqKe23hwA7gnfF44R7aanLL1iqSDJ7hOFP&s=10", displayOrder: 3 },
+                { name: "Maracujá", description: "Suco natural de maracujá", price: "8.50", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcq-nI32q_A76sZ_kmos8y6cP_7mqek_xR4TcmjLA0AQ_gjSw0eB4-cE6V&s=10", displayOrder: 4 },
+                { name: "Goiaba", description: "Suco natural de goiaba", price: "8.50", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7O2qLbrKkHaVc2Ip2tobxcedhWDgZLVqJ4KxLvNU1wSE9JPrIxpC8aGI&s=10", displayOrder: 5 },
+                { name: "Abacaxi", description: "Suco natural de abacaxi", price: "9.00", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZUxsbeY8pLs4EElVvrNeShzW3CHJaMyoB83wQYfs4BpE0sD9z9M0Kxgc&s=10", displayOrder: 6 },
+                { name: "Acerola", description: "Suco natural de acerola", price: "8.00", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQr5qdy1tC3wzvMdqxTMYUmDg0gteLshasWXgUpAoMpieQEWKyFdgNQ1jeW&s=10", displayOrder: 7 },
+                { name: "Caju", description: "Suco natural de caju", price: "8.50", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE7WbwjPyVaOS9tvjdPQRgq8-fnnhCY5NZle2G5wuyf1irhjkEN1B1FbE&s=10", displayOrder: 8 },
+                { name: "Vitamina de Banana com Leite", description: "Vitamina cremosa de banana", price: "10.00", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwotAgV6vCBm_gMvcMENDDSdE2mXwYwiQWMJOLB7-IoQ&s=10", displayOrder: 9 },
+                { name: "Vitamina de Abacate", description: "Vitamina cremosa de abacate", price: "11.00", categorySlug: "sucos", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa6CNCDQ82fJWazf7cKEDcV78_d6xfm1yHoGSJf2nqyw&s=10", displayOrder: 10 },
+
+                // BEBIDAS
+                { name: "Refrigerante Lata", description: "Refrigerante em lata 350ml", price: "5.00", categorySlug: "bebidas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcK9vXkxY2etNif44CKkuZROeGeVyDC93DEw&s", displayOrder: 1 },
+                { name: "Refrigerante 600ml", description: "Refrigerante garrafa 600ml", price: "8.00", categorySlug: "bebidas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcK9vXkxY2etNif44CKkuZROeGeVyDC93DEw&s", displayOrder: 2 },
+                { name: "Água Mineral", description: "Água mineral sem gás", price: "3.00", categorySlug: "bebidas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTh-CeOpEpDFOsaA5SkIz-BL8ssQTQ6NcA2wsXrFtOc2w&s=10", displayOrder: 3 },
+                { name: "Água com Gás", description: "Água mineral com gás", price: "4.00", categorySlug: "bebidas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcK9vXkxY2etNif44CKkuZROeGeVyDC93DEw&s", displayOrder: 4 },
+                // NOVAS BEBIDAS
+                { name: "Cerveja Lata", description: "Cerveja gelada em lata 350ml", price: "6.00", categorySlug: "bebidas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcK9vXkxY2etNif44CKkuZROeGeVyDC93DEw&s", displayOrder: 5 },
+                { name: "Cerveja Garrafa 600ml", description: "Cerveja gelada garrafa 600ml", price: "12.00", categorySlug: "bebidas", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcK9vXkxY2etNif44CKkuZROeGeVyDC93DEw&s", displayOrder: 6 },
+
+                // FEIJOADA - NOVA CATEGORIA
+                { name: "Feijoada Uma Pessoa", description: "Feijoada completa com acompanhamentos: farofa, vinagrete, arroz, couve, laranja, torresmo", price: "29.90", categorySlug: "feijoada", imageUrl: "https://claudia.abril.com.br/wp-content/uploads/2020/02/receita-feijoada.jpg?quality=70&strip=info&w=620", displayOrder: 1 },
+                { name: "Feijoada Duas Pessoas", description: "Feijoada completa para duas pessoas com acompanhamentos: farofa, vinagrete, arroz, couve, laranja, torresmo", price: "57.90", categorySlug: "feijoada", imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmCr-ecJwluJsR_ocPBohQL3A-hoVtTyx0-x0IAtLYJoq2Ai-87ShehwQ&s=10", displayOrder: 2 },
+            ]
+        };
+
+        // STATE MANAGEMENT
+        let currentCategory = 'pizzas';
+        let cart = [];
+        let productQuantities = {};
+
+        // INITIALIZATION
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProducts();
+            updateCartDisplay();
+        });
+
+        // CATEGORY SELECTION
+        function selectCategory(categorySlug) {
+            currentCategory = categorySlug;
+            
+            // Update active button
+            document.querySelectorAll('.category-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Render products for selected category
+            renderProducts();
+        }
+
+        // RENDER PRODUCTS
+        function renderProducts() {
+            const container = document.getElementById('productSections');
+            const category = MENU_DATA.categories.find(cat => cat.slug === currentCategory);
+            const products = MENU_DATA.products
+                .filter(product => product.categorySlug === currentCategory)
+                .sort((a, b) => a.displayOrder - b.displayOrder);
+
+            container.innerHTML = `
+                <div class="category-section">
+                    <div class="category-header">
+                        <h2>${category.name}</h2>
+                        <p>${products.length} ${products.length === 1 ? 'item' : 'itens'} disponíveis</p>
+                    </div>
+                    <div class="products-grid">
+                        ${products.map(product => createProductCard(product)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // CREATE PRODUCT CARD
+        function createProductCard(product) {
+            const productId = generateProductId(product);
+            const isPizza = product.categorySlug === 'pizzas';
+            const currentQuantity = productQuantities[productId] || 1;
+            const currentSize = getCurrentSize(productId) || 'broto';
+            const currentPrice = isPizza && currentSize === 'grande' && product.priceGrande 
+                ? product.priceGrande 
+                : product.price;
+
+            return `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.imageUrl}" alt="${product.name}" 
+                             onerror="this.src='https://via.placeholder.com/300x200?text=Produto'">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">${product.name}</h3>
+                        ${product.description ? `<p class="product-description">${product.description}</p>` : ''}
+                        
+                        ${isPizza && product.priceGrande ? `
+                            <div class="pizza-sizes">
+                                <p>Tamanho:</p>
+                                <div class="size-buttons">
+                                    <button class="size-button ${currentSize === 'broto' ? 'active' : ''}" 
+                                            onclick="updateSize('${productId}', 'broto')">
+                                        Broto
+                                    </button>
+                                    <button class="size-button ${currentSize === 'grande' ? 'active' : ''}" 
+                                            onclick="updateSize('${productId}', 'grande')">
+                                        Grande
+                                    </button>
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="quantity-price">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity('${productId}', ${currentQuantity - 1})"
+                                        ${currentQuantity <= 1 ? 'disabled' : ''}>
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="quantity-display">${currentQuantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity('${productId}', ${currentQuantity + 1})">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="product-price">R$ ${currentPrice}</div>
+                        </div>
+                        
+                        <button class="add-to-cart" onclick="addToCart('${productId}')">
+                            <i class="fas fa-plus"></i>
+                            Adicionar ao Carrinho
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // HELPER FUNCTIONS
+        function generateProductId(product) {
+            return `${product.categorySlug}-${product.name.toLowerCase().replace(/\s+/g, '-')}`;
+        }
+
+        function getCurrentSize(productId) {
+            return localStorage.getItem(`size-${productId}`) || 'broto';
+        }
+
+        function updateSize(productId, size) {
+            localStorage.setItem(`size-${productId}`, size);
+            renderProducts(); // Re-render to update the UI
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity < 1) return;
+            productQuantities[productId] = newQuantity;
+            renderProducts(); // Re-render to update the UI
+        }
+
+        // CART FUNCTIONS
+        function addToCart(productId) {
+            const product = findProductById(productId);
+            if (!product) return;
+
+            const quantity = productQuantities[productId] || 1;
+            const size = product.categorySlug === 'pizzas' ? getCurrentSize(productId) : null;
+            const price = parseFloat(size === 'grande' && product.priceGrande ? product.priceGrande : product.price);
+
+            const cartItemId = `${productId}-${size || 'default'}`;
+            
+            const existingItemIndex = cart.findIndex(item => item.id === cartItemId);
+            
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += quantity;
+            } else {
+                cart.push({
+                    id: cartItemId,
+                    name: product.name,
+                    price: price,
+                    size: size,
+                    quantity: quantity,
+                    imageUrl: product.imageUrl
+                });
+            }
+            
+            updateCartDisplay();
+            showToast("Adicionado ao carrinho!", `${quantity}x ${product.name}${size ? ` (${size === 'broto' ? 'Broto' : 'Grande'})` : ''} adicionado com sucesso.`);
+            
+            // Reset quantity after adding
+            productQuantities[productId] = 1;
+    
+        }
+
+        function findProductById(productId) {
+    // Remove a categoria do ID para obter apenas o nome do produto
+    const categorySlugs = MENU_DATA.categories.map(cat => cat.slug);
+    let productName = productId;
+    
+    // Remove a parte da categoria do ID
+    categorySlugs.forEach(slug => {
+        if (productId.startsWith(slug + '-')) {
+            productName = productId.replace(slug + '-', '');
+        }
+    });
+    
+    // Converte para formato comparável (sem hífens, lowercase)
+    const searchName = productName.replace(/-/g, ' ').toLowerCase();
+    
+    return MENU_DATA.products.find(product => {
+        const productNameNormalized = product.name.toLowerCase();
+        return productNameNormalized.includes(searchName) || 
+               searchName.includes(productNameNormalized);
+    });
+}
+
+        function updateCartQuantity(itemId, newQuantity) {
+            if (newQuantity === 0) {
+                removeFromCart(itemId);
+                return;
+            }
+            
+            const itemIndex = cart.findIndex(item => item.id === itemId);
+            if (itemIndex > -1) {
+                cart[itemIndex].quantity = newQuantity;
+                updateCartDisplay();
+            }
+        }
+
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCartDisplay();
+            showToast("Item removido", "Item removido do carrinho com sucesso.");
+        }
+
+        function updateCartDisplay() {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            
+            document.getElementById('cartCount').textContent = cartCount;
+            document.getElementById('cartCount').style.display = cartCount > 0 ? 'flex' : 'none';
+            
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartCheckout = document.getElementById('cartCheckout');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fas fa-shopping-bag"></i>
+                        <p>Seu carrinho está vazio</p>
+                        <small>Adicione alguns produtos para começar</small>
+                    </div>
+                `;
+                cartCheckout.style.display = 'none';
+            } else {
+                cartItemsContainer.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <img src="${item.imageUrl}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">
+                                ${item.name}
+                                ${item.size ? `<span class="cart-item-size">${item.size === 'broto' ? 'Broto' : 'Grande'}</span>` : ''}
+                            </div>
+                            <div class="cart-item-controls">
+                                <div class="cart-item-quantity">
+                                    <button onclick="updateCartQuantity('${item.id}', ${item.quantity - 1})"
+                                            ${item.quantity <= 1 ? 'disabled' : ''}>
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span>${item.quantity}</span>
+                                    <button onclick="updateCartQuantity('${item.id}', ${item.quantity + 1})">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div class="cart-item-price">R$ ${(item.price * item.quantity).toFixed(2)}</div>
+                                <button class="remove-item" onclick="removeFromCart('${item.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('cartTotal').textContent = `R$ ${cartTotal.toFixed(2)}`;
+                cartCheckout.style.display = 'block';
+            }
+        }
+
+        // MODAL FUNCTIONS
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('open');
+        }
+
+        // CHECKOUT
+        function checkout() {
+            const customerName = document.getElementById('customerName').value.trim();
+            const tableNumber = document.getElementById('tableNumber').value.trim();
+            const notes = document.getElementById('orderNotes').value.trim();
+            
+            if (!customerName || !tableNumber) {
+                alert('Por favor, preencha seu nome e número da mesa.');
+                return;
+            }
+            
+            // Here you would typically send to your backend/Supabase
+            console.log('Processing order:', {
+                customer: { name: customerName, table: tableNumber, notes },
+                items: cart,
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+            });
+            
+            // Clear cart and form
+            cart = [];
+            document.getElementById('customerName').value = '';
+            document.getElementById('tableNumber').value = '';
+            document.getElementById('orderNotes').value = '';
+            
+            updateCartDisplay();
+            toggleCart();
+            
+            showToast("Pedido enviado!", `Obrigado ${customerName}! Seu pedido foi enviado para a cozinha.`);
+        }
+
+        // TOAST NOTIFICATIONS
+        function showToast(title, description) {
+            const toast = document.getElementById('toast');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastDescription = document.getElementById('toastDescription');
+            
+            toastTitle.textContent = title;
+            toastDescription.textContent = description;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // CLOSE MODAL ON OUTSIDE CLICK
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleCart();
+            }
+        });
+    </script>
+</body>
+</html>

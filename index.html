@@ -1412,5 +1412,177 @@
             }
         });
     </script>
+    <!-- Supabase + integração de checkout -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ----------------- CONFIGURE AQUI -----------------
+  const SUPABASE_URL = "https://azajomymjsfeyqabgytl.supabase.co"; // <- substitua
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF6YWpvbXltanNmZXlxYWJneXRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwOTM3ODcsImV4cCI6MjA3NDY2OTc4N30.HDCVP-sC8vyyBzDCxuMT5LTSDFflmJSHyP51TXxD4Og"; // <- substitua (anon key)
+  // -------------------------------------------------
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Se você já tem variáveis/funcs cart, renderCart, calculateTotal, toggleCart definidas
+  // este código tentará usá-las. Caso não exista, definimos implementações simples.
+
+  // ------------- helpers (não mexa se já existir) -------------
+  // garantia: existe a variável cart como array
+  if (typeof cart === "undefined") window.cart = [];
+
+  // calculateTotal: tenta usar a função existente, senão define uma
+  function safeCalculateTotal(cartArray) {
+    try {
+      if (typeof calculateTotal === "function") return calculateTotal(cartArray);
+    } catch (e) {}
+    // implementação fallback (soma item.price * item.quantity)
+    return cartArray.reduce((sum, it) => {
+      const price = parseFloat(it.price ?? it.preco ?? 0) || 0;
+      const qty = parseInt(it.quantity ?? it.qtd ?? 1) || 1;
+      return sum + price * qty;
+    }, 0);
+  }
+
+  // renderCart: tenta usar função existente, senão atualiza contador e modal simples
+  function safeRenderCart() {
+    try {
+      if (typeof renderCart === "function") return renderCart();
+    } catch (e) {}
+    // fallback: atualiza contador se existir #cartCount
+    const countEl = document.getElementById("cartCount");
+    if (countEl) {
+      const totalQty = window.cart.reduce((s, i) => s + (parseInt(i.quantity || 1) || 1), 0);
+      countEl.textContent = totalQty;
+    }
+    // atualiza total exibido se existir #cartTotal
+    const totalEl = document.getElementById("cartTotal");
+    if (totalEl) totalEl.textContent = formatBRL(safeCalculateTotal(window.cart));
+  }
+
+  // toggleCart fallback
+  function safeToggleCart(closeOnly = false) {
+    try {
+      if (typeof toggleCart === "function") {
+        // se closeOnly pedimos somente fechar
+        if (closeOnly && document.getElementById("cartModal")?.classList.contains("open")) toggleCart();
+        else if (!closeOnly) toggleCart();
+        return;
+      }
+    } catch (e) {}
+    const modal = document.getElementById("cartModal");
+    if (!modal) return;
+    if (closeOnly) modal.classList.remove("open");
+    else modal.classList.toggle("open");
+  }
+
+  // formatar valor em R$
+  function formatBRL(value) {
+    try {
+      return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    } catch (e) {
+      return "R$ " + Number(value).toFixed(2);
+    }
+  }
+
+  // Toast (usa elementos já existentes: #toast, #toastTitle, #toastDescription)
+  function showToast(title, desc, timeout = 2500) {
+    const toast = document.getElementById("toast");
+    if (!toast) {
+      alert(title + "\n" + desc);
+      return;
+    }
+    const tTitle = document.getElementById("toastTitle");
+    const tDesc = document.getElementById("toastDescription");
+    if (tTitle) tTitle.textContent = title;
+    if (tDesc) tDesc.textContent = desc;
+    toast.classList.add("show");
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => toast.classList.remove("show"), timeout);
+  }
+
+  // ------------- função de checkout chamada pelo botão -------------
+  async function checkout() {
+    // pega campos do formulário (conforme seu HTML)
+    const customerNameEl = document.getElementById("customerName");
+    const tableNumberEl = document.getElementById("tableNumber");
+    const notesEl = document.getElementById("orderNotes");
+
+    const customerName = customerNameEl ? customerNameEl.value.trim() : "";
+    const tableNumber = tableNumberEl ? tableNumberEl.value.trim() : "";
+    const notes = notesEl ? notesEl.value.trim() : "";
+
+    // validações simples
+    if (!window.cart || window.cart.length === 0) {
+      showToast("Carrinho vazio", "Adicione produtos antes de finalizar.");
+      return;
+    }
+    if (!customerName) {
+      showToast("Preencha seu nome", "Digite o nome para continuar.");
+      if (customerNameEl) customerNameEl.focus();
+      return;
+    }
+    if (!tableNumber) {
+      showToast("Informe a mesa", "Digite o número da mesa.");
+      if (tableNumberEl) tableNumberEl.focus();
+      return;
+    }
+
+    // prepara o objeto order para enviar ao Supabase
+    // normalizamos items: { name, quantity, price, size? }
+    const itemsForDb = window.cart.map(it => ({
+      name: it.name || it.nome || "Produto",
+      quantity: parseInt(it.quantity || it.qtd || 1) || 1,
+      price: parseFloat(it.price ?? it.preco ?? 0) || 0,
+      size: it.size || it.tamanho || null,
+      extras: it.extras || null
+    }));
+
+    const total = Number(safeCalculateTotal(window.cart));
+
+    const order = {
+      customer_name: customerName,
+      table_number: tableNumber,
+      status: "pending",
+      items: itemsForDb,
+      total: total,
+      notes: notes || null
+    };
+
+    // desabilitar botão para evitar múltiplos cliques (se existir)
+    const btns = document.querySelectorAll(".checkout-button, .add-to-cart");
+    btns.forEach(b => b.setAttribute("disabled", "disabled"));
+
+    try {
+      const { data, error } = await supabase.from("orders").insert([order]).select().single();
+      if (error) throw error;
+
+      // sucesso
+      showToast("Pedido enviado", "Seu pedido foi registrado na cozinha ✅");
+      // limpa carrinho
+      window.cart = [];
+      safeRenderCart();
+      // fecha modal do carrinho
+      safeToggleCart(true);
+      // limpa campos do formulário
+      if (customerNameEl) customerNameEl.value = "";
+      if (tableNumberEl) tableNumberEl.value = "";
+      if (notesEl) notesEl.value = "";
+
+      console.log("Pedido enviado:", data);
+
+    } catch (err) {
+      console.error("Erro ao enviar pedido:", err);
+      showToast("Erro ao enviar", err.message || "Tente novamente.");
+    } finally {
+      btns.forEach(b => b.removeAttribute("disabled"));
+    }
+  }
+
+  // deixar a função disponível globalmente, pois seu botão chama checkout()
+  window.checkout = checkout;
+
+  // atualiza contadores iniciais e render cart
+  document.addEventListener("DOMContentLoaded", () => {
+    safeRenderCart();
+  });
+</script>
 </body>
 </html>
